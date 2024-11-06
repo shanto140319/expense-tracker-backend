@@ -13,14 +13,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   userName: string;
 
-  @Column()
-  phoneNumber: string;
+  @Column({ unique: true })
+  email: string;
 
   @Column()
   password: string;
+
+  @Column({ nullable: true })
+  resetToken: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetTokenExpires: Date;
 
   @CreateDateColumn()
   createdDate: Date;

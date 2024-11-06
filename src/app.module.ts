@@ -23,7 +23,7 @@ import { UserModule } from './user/user.module';
         ssl: { rejectUnauthorized: false },
       },
       autoLoadEntities: true,
-      synchronize: true, // for dev only
+      // synchronize: true, // for dev only
     }),
     UserModule,
     CategoryModule,
