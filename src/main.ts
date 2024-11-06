@@ -12,7 +12,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'https://expense-tracker-backend-1-ud79.onrender.com',
+    origin: 'https://expense-tracker-shanto.vercel.app/',
     methods: 'GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS',
     credentials: true,
   });
