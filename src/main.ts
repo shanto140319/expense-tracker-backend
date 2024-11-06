@@ -12,7 +12,10 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'https://expense-tracker-shanto.vercel.app/',
+    origin: [
+      'https://expense-tracker-shanto.vercel.app',
+      'http://localhost:3000',
+    ],
     methods: 'GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS',
     credentials: true,
   });
