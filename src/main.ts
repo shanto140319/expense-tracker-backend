@@ -12,9 +12,9 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'http://localhost:3000', // allow requests from frontend
+    origin: 'https://expense-tracker-backend-1-ud79.onrender.com',
     methods: 'GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS',
-    credentials: true, // enable cookies
+    credentials: true,
   });
 
   await app.listen(process.env.PORT ?? 5000);
