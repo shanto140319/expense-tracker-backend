@@ -13,18 +13,17 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.development',
+      envFilePath: '.env',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost', // or your database host
-      port: 5432, // default PostgreSQL port
-      username: 'postgres', // your database username
-      password: '54321', // your database password
-      database: 'postgres', // your database name
-      autoLoadEntities: true, // loads entities automatically
-      synchronize: true, // syncs schema, use in dev only
+      url: process.env.DATABASE_URL,
+      extra: {
+        ssl: { rejectUnauthorized: false },
+      },
+      autoLoadEntities: true,
+      synchronize: true, // for dev only
     }),
     UserModule,
     CategoryModule,
