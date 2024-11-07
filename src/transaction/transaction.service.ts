@@ -43,6 +43,9 @@ export class TransactionService {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
+    if (!startDate || !endDate) {
+      throw new NotFoundException('start date and end date empty');
+    }
     return await this.transactionRepository.find({
       where: {
         user: { id: userId },

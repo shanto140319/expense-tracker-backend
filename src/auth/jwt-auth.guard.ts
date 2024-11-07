@@ -9,6 +9,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     { path: '/auth/refresh', method: 'POST' },
     { path: '/user/forget', method: 'GET' },
     { path: '/user/reset-password', method: 'POST' },
+    { path: '/health', method: 'GET' },
   ];
 
   canActivate(context: ExecutionContext) {
