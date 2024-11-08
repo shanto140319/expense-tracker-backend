@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -9,7 +10,7 @@ import * as crypto from 'crypto';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
 import { User } from 'src/entities/user.entity';
 import { sendPasswordResetEmail } from 'src/util/nodeMailer';
-import { MoreThan, Repository } from 'typeorm';
+import { ILike, MoreThan, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -19,12 +20,19 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.getUserByUsernameOrEmail(
-      createUserDto.userName,
-    );
-    const existingEmail = await this.getUserByUsernameOrEmail(
-      createUserDto.email,
-    );
+    const { userName, email, password } = createUserDto;
+
+    // Check if the username has only alphanumeric characters and underscores, with no spaces
+    const isValidUsername = /^[a-zA-Z0-9_]+$/.test(userName);
+    if (!isValidUsername) {
+      throw new BadRequestException(
+        'Username can only contain letters, numbers, and underscores, with no spaces.',
+      );
+    }
+
+    // Check if the user or email already exists
+    const existingUser = await this.getUserByUsernameOrEmail(userName);
+    const existingEmail = await this.getUserByUsernameOrEmail(email);
 
     if (existingUser || existingEmail) {
       throw new ConflictException(
@@ -32,8 +40,9 @@ export class UserService {
       );
     }
 
+    // Hash the password and create a new user
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
@@ -45,7 +54,10 @@ export class UserService {
     identifier: string,
   ): Promise<User | undefined> {
     const user = await this.userRepository.findOne({
-      where: [{ userName: identifier }, { email: identifier }],
+      where: [
+        { userName: ILike(`%${identifier}%`) },
+        { email: ILike(`%${identifier}%`) },
+      ],
     });
     return user;
   }
