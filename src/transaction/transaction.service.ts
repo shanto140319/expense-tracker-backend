@@ -52,6 +52,9 @@ export class TransactionService {
         createdDate: MoreThanOrEqual(start) && LessThanOrEqual(end),
       },
       relations: ['category', 'user'],
+      order: {
+        createdDate: 'DESC', // Sort by createdDate in descending order
+      },
     });
   }
 
