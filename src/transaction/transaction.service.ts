@@ -4,7 +4,7 @@ import { CreateTransactionDto } from 'src/dtos/createTransaction.dto';
 import { UpdateTransactionDto } from 'src/dtos/UpdateTransactio.dto';
 import { Transaction } from 'src/entities/transaction.entity';
 import { User } from 'src/entities/user.entity';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 @Injectable()
 export class TransactionService {
@@ -49,7 +49,7 @@ export class TransactionService {
     return await this.transactionRepository.find({
       where: {
         user: { id: userId },
-        createdDate: MoreThanOrEqual(start) && LessThanOrEqual(end),
+        createdDate: Between(start, end),
       },
       relations: ['category', 'user'],
       order: {
